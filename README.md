@@ -144,7 +144,7 @@ docker rm -f <container-id>
 ```
 
 To delete docker images in the server
-``
+```
 docker rmi <image-id>
 ```
 Pulling the image, creating container and running container we need to use 3 commands. We can use docker run command directly to do all these 3 tasks. docker run command pulls the image, creates the container and starts the container.
