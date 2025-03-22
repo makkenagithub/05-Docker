@@ -205,6 +205,10 @@ DOCKER FILE:
 
 docker file is used to build custom images. We can make use of docker instructions to create custom images.
 
+Custom image is just like slecting a base OS, installing applocation runtime, place the code and create the image.
 
+some docker instructions are 
+
+FROM RUN CMD ENTRYPOINT COPY ADD ENV ARG USER WORKDIR 
 
 
