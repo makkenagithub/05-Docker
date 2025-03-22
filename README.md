@@ -158,6 +158,52 @@ To run in the background use -d  (detaching from screen)
 docker run -d <image-name>
 ```
 
+Container is like a mini/nano server. It also has ports ranging from 0 to 65535 ports (container ports).
+
+Server has its own ports (host ports). For eg if we run an nginx container in the server, container is having port 80. 
+
+We need to map host port with container port. We can use any host portnumber to map with container port number.
+
+-p <host-port>:<container-port>
+
+```
+docker run -d -p <hostport:container-port> <image-name>
+docker run -d -p 80:80 nginx
+```
+After mapping the port by running above command, if we give IP address in the url, it shows nginx website.
+
+We can run many containers in the server by using same image also. We can run multiple nginx containers in one server also, as below
+```
+docker run -d -p 8080:80 nginx
+docker run -d -p 8081:80 nginx
+```
+Port mapping is called as port forwarding
+
+TO go inside the container the command is
+```
+docker exec -it <container-id> bash
+```
+it is interactive terminal. bash is bash terminal
+
+To get the full information of about container
+```
+docker inspect <container-id>
+```
+TO see the docker logs
+```
+docker logs <container-id/container-name>
+```
+When we create/run a contianer it give a random name to the container by clubbing two words with underscore symbol.
+
+If we want give a name to container
+
+```
+docker run -d -p 8082:80 --name suresh nginx
+```
+
+DOCKER FILE:
+
+docker file is used to build custom images. We can make use of docker instructions to create custom images.
 
 
 
