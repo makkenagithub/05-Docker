@@ -86,6 +86,10 @@ Official images naming as follows:
 
 image-name:version
 
+or 
+
+image-name:tag
+
 eg:
 
 nginx:1.0.0
@@ -205,10 +209,38 @@ DOCKER FILE:
 
 docker file is used to build custom images. We can make use of docker instructions to create custom images.
 
+Docker file is the declarative way of creating docker images using docker instructions.
+
+Follow the docker reference link for docker instructions  https://docs.docker.com/reference/dockerfile/
+
 Custom image is just like slecting a base OS, installing applocation runtime, place the code and create the image.
 
 some docker instructions are 
 
 FROM RUN CMD ENTRYPOINT COPY ADD ENV ARG USER WORKDIR 
+
+FROM:
+
+FROM should be the first instruction in Dockerfile. It represents the base OS. There is an exeption ARG. Mostly(99%) FROM is first instruction.
+
+In VMs are using RHEL OS, its of very high memory. RHEL also provides docker image which is of light weight. 
+
+Any docker file which we are writing, its file name should be Dockerfile.
+
+TO Biuld a docker image:
+
+We need to write a Dockerfile amd give below docker build command to create a docker image. Dockerfile should present in the current directory before running the below build command
+```
+docker build -t <image-name>:<version> .
+```
+Here we can give our own image name and version. '.' indicates current directory. t is tagging the image
+
+RUN:
+
+RUN instruction is used to configure the image with packages and other configurations. RUN instruction runs at the time of image building
+
+
+
+
 
 
