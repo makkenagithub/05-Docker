@@ -239,8 +239,35 @@ RUN:
 
 RUN instruction is used to configure the image with packages and other configurations. RUN instruction runs at the time of image building
 
+CMD:
 
+CMD instruction runs at the time of container creation. (i.e. when we run docker run command, CMD instruction runs)It keeps container running.
 
+systemctl commands work for VMs. It does not work for containers. (For eg: systemctl start nginx) We need to use CMD to run nginx
+
+To run nginx in foreground
+```
+CMS ["nginx", "-g". "daemon off;"]
+```
+daemon-off is to run the command in foreground
+
+There can only be one CMD instruction in a Dockerfile. If you list more than one CMD, only the last one takes effect.
+
+To change the tag of a docker image:
+```
+docker tag <old tag> <new tag>
+docker tag suresh-image-name:v1 joindevops/nginx:v1
+```
+
+To push a docker image to docker hub, we need to login to docker hub and then push the image
+```
+docker login -u <username>
+docker push <image-name:version>
+docker push joindevops/nginx:v1
+```
+CMD vs RUN difference in dockerfile:
+
+CMD runs at the time of container creation. RUN command runs at the time of image creation
 
 
 
