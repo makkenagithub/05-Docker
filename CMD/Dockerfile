@@ -4,6 +4,6 @@
 FROM almalinux:9
 # install nginx 
 RUN dnf install nginx -y
-
-# when we build this docker file, image will be generated with nginx in base OS alma linux
+#to run the command in a container. It starts nginx in the container in foreground
+CMD ["nginx", "-g", "daemon off;"]
 
