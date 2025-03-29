@@ -296,7 +296,7 @@ When we see docker inspect , it gives info about exposed ports
 
 ENV:
 
-ENV is also like a key value pair. It gives info abour environment variables of the image
+ENV is also like a key value pair. It sets the environment variables in the container. It gives info abour environment variables of the image
 
 ```
 ENV Author="suresh m" \
@@ -322,6 +322,58 @@ ADD also does the same as COPY, but it has 2 extra capabilities
 
 1. It can get/pulls files from internet URLs
 2. It can extract files into image. (ADD sample.tar /tmp/) This command untars the sample.tar in destination location in image. If we use cOPY instruction, it wont extract tar file
+
+
+ENTRYPOINT:
+
+```
+FROM almalinux:9
+CMD ["ping", "google.com"]
+```
+build the docker image with above docker file and the run as below
+```
+docker run -d <image> ping yahoo.com
+```
+Check the docker logs. It pings the yahoo.com It means CMD can be replaced at run time.
+
+```
+FROM almalinux:9
+ENTRYPOINT ["ping", "google.com"]
+```
+build the docker image with above docker file and the run as below
+```
+docker run -d <image> ping yahoo.com
+```
+Container will not run in this case. Check the docker logs. It pings like "ping google.com ping yahoo.com" . Its not valid command hence container will not run.
+ENTRYPOINT appends ENTRYPOINT command and command given during run time.
+
+We can use ENTRYPOINT and CMD as below for best practices.
+```
+FROM almalinux:9
+#CMD ["ping", "google.com"]
+CMD ["google.com"]
+ENTRYPOINT ["ping"]
+```
+
+```
+docker run -d <above-image-name>
+```
+Now it pings google.com. Hence CMD can be used as to pass arguments to ENTRYPOINT. So the default arguments can be passed through CMD and we can overwrite them at run time.
+```
+docker run -d <above-image-name> yahoo.com
+```
+Now CMD will be replaced with yahoo.com and pings yahoo.com, it appends ENTRYPOINT with runtime command yahoo.com
+
+We can use both entrypoint and cmd as above for best practices.
+
+CMD can be used to pass arguments to ENTRYPOINT.
+
+
+USER:
+
+
+
+
 
 
 
