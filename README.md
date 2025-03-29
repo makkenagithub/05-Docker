@@ -306,6 +306,23 @@ we can access these env variables inside the container. It may be helpful to acc
 
 When we do not give any CMD instruction in a docker file, then if give docker run command, it wont run. So we have to give a CMD instruction in docker file, to make something to run in container.
 
+COPY:
+Used to copy files from local to image.
+
+The COPY instruction copies new files or directories from <src> and adds them to the filesystem of the image at the path <dest>. Files and directories can be copied from the build context, build stage, named context, or an image.
+
+The ADD and COPY instructions are functionally similar, but serve slightly different purposes. Learn more about the differences between ADD and COPY.
+
+ADD:
+
+The ADD instruction copies new files or directories from <src> and adds them to the filesystem of the image at the path <dest>. 
+Files and directories can be copied from the build context, a remote URL, or a Git repository.
+
+ADD also does the same as COPY, but it has 2 extra capabilities
+
+1. It can get/pulls files from internet URLs
+2. It can extract files into image. (ADD sample.tar /tmp/) This command untars the sample.tar in destination location in image. If we use cOPY instruction, it wont extract tar file
+
 
 
 
