@@ -7,4 +7,4 @@ RUN dnf install nginx -y
 #to run the command in a container. It starts nginx in the container in foreground
 CMD ["nginx", "-g", "daemon off;"]
 #only one CMD command can exists in a dockerfile. If we give multiple CMDs then the last CMD will be executed.
-
+EXPOSE 80
