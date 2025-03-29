@@ -247,7 +247,7 @@ systemctl commands work for VMs. It does not work for containers. (For eg: syste
 
 To run nginx in foreground
 ```
-CMS ["nginx", "-g". "daemon off;"]
+CMD ["nginx", "-g". "daemon off;"]
 ```
 daemon-off is to run the command in foreground
 
@@ -268,6 +268,45 @@ docker push joindevops/nginx:v1
 CMD vs RUN difference in dockerfile:
 
 CMD runs at the time of container creation. RUN command runs at the time of image creation
+
+LABEL:
+
+LABEL instruction adds meta data to image. Like a key value pair. Like description of image, owner name, project name. Labels are used to filter the images
+
+```
+LABEL author="suresh" \
+      company = "ibm" \
+      topic="docker files"
+```
+
+This is useful especially, when we need to filter and list down the existing images.
+eg:
+```
+docker images -f "label=company=ibm"
+```
+It lists the label having company name is ibm
+
+EXPOSE:
+
+is used to know the list of ports opened by the conatiner, when the container runs. EXPOSE instruction does not effect functionality. It only gives info about ports.
+The EXPOSE instruction doesn't actually publish the port. User knows the exposed ports of an image by using docker inspect command. 
+In the docker file, image builder person specifes the ports used by application.
+
+When we see docker inspect , it gives info about exposed ports
+
+ENV:
+
+ENV is also like a key value pair. It gives info abour environment variables of the image
+
+```
+ENV Author="suresh m" \
+    Author2="rohan m"
+```
+we can access these env variables inside the container. It may be helpful to access DB urls or API urls etc
+
+When we do not give any CMD instruction in a docker file, then if give docker run command, it wont run. So we have to give a CMD instruction in docker file, to make something to run in container.
+
+
 
 
 
