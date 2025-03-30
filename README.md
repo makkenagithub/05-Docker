@@ -371,11 +371,34 @@ CMD can be used to pass arguments to ENTRYPOINT.
 
 USER:
 
+If we do not provide USER istruction in dockerfile, by default container runs on root user. Hence for security reasons, we should not run container with root.
 
+For security, container must run on normal user. Atleast last instruction in docker file must be USER <user-name> 
 
+If we give USER instruction, then the container will run on that user from the line where the USER instruction used in docker file
 
+WORKDIR:
 
+WORKDIR is used to set the current working directory inside docker image(container). 
 
+cd command does not work in container
+
+ARG:
+
+ARG is used to set the variables at the build time only, not inside the container. ENV is used to set the env variables inside the container and ENV variables can be used during image build time also.
+
+ARG vs ENV:
+
+1. ENV variables can be accessed in image build time and in container both
+2. ARG is accessable at the time image creation
+3. Usually FROM should be the first instruction in a docker file. But we have an exception, we can use ARG as first instruction to pass version to base image.
+4. If we pass ARG as first instruction, then its value is accessable only till FROM instruction. It can be used in FROM instarutcion only, Later its not accessable. 
+
+we can pass the ARG values at the time of build also , we can overwrite default values with build command as below
+
+docker build -t image:v1 --build-arg var1=suresh --build-arg var2=30 .
+
+ONBUILD:
 
 
 
