@@ -392,13 +392,20 @@ ARG vs ENV:
 1. ENV variables can be accessed in image build time and in container both
 2. ARG is accessable at the time image creation
 3. Usually FROM should be the first instruction in a docker file. But we have an exception, we can use ARG as first instruction to pass version to base image.
-4. If we pass ARG as first instruction, then its value is accessable only till FROM instruction. It can be used in FROM instarutcion only, Later its not accessable. 
+4. If we pass ARG as first instruction, then its value is accessable only till FROM instruction. It can be used in FROM instrutcion only, Later its not accessable. 
 
 we can pass the ARG values at the time of build also , we can overwrite default values with build command as below
 
 docker build -t image:v1 --build-arg var1=suresh --build-arg var2=30 .
 
 ONBUILD:
+
+ONBUILD instruction runs only when others use this image. It will not run when we are building this image
+
+Onbuild is used to trigger few instructions at build when a user is using our image.
+
+https://docs.docker.com/reference/dockerfile/#onbuild
+
 
 
 
