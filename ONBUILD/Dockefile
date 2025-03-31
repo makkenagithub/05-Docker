@@ -1,0 +1,10 @@
+FROM almalinux:9
+RUN dnf install nginx -y
+RUN rm -rf /usr/share/nginx/html/index.html
+
+#This ONBUILD instruction runs only when others use this image. It will not run when are building this image
+ONBUILD COPY index.html /usr/share/nginx/html/index.html
+
+CMD ["nginx", "-g", "daemon off;"]
+
+# docker build -t onbuild:v1 .
