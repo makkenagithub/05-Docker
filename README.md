@@ -408,4 +408,48 @@ https://docs.docker.com/reference/dockerfile/#onbuild
 
 
 
+DOCKER NETWORK:
+
+When we create an ec2 indtance from AWS, and give command 'ifconfig', we see ens5 wit some private IP (172.31.27.183). So every VM gets access to internet from AWS ISP(internet service provider)
+
+After installing docker in the ec2, give ifconfig command and see. Docker create a virtual network interface with name docker0, and IP(172.17.0.1). This docker0 is called bridge network. This default network of docker.
+
+docker0 acts as modem to the containers inside VM. If we create a container (mysql/backend) , docker0 provides IP to that container. Container IP looks as 172.17.0.2 , we can see container IP wtih docker ps command
+
+Docker containers can't be communicated using default n/w.  When we use docker default network, we can't communicate between containers. For expense project, backend needs to communicate with mqsql. frontend to backend.
+
+TO make the containers to communicate we have to create our own docker network.
+
+TO see list of dcoker networks
+```
+docker network ls
+```
+To create a n/w
+```
+docker netwrok --help
+docker network create <network-name- expense>
+ifconfig
+```
+To connect a container to docker network
+```
+docker network connect <network-name> <container-name/id>
+docker network connect expense mysql
+```
+To disconnect a container from a network / default network
+```
+docker network ls
+docker network disconnect <default-network-name-bridge> <container-name>
+```
+
+To place a container to a newtwork while running it
+```
+docker run -d --network <networkname-expense> --name <container name - backend> backend:v1
+docker run -d -p 80:80 --network <n/w-name:expense> --name <container-name- frontend> frontend:v1
+```
+
+
+
+
+
+
 
