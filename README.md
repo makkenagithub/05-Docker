@@ -447,6 +447,91 @@ docker run -d --network <networkname-expense> --name <container name - backend> 
 docker run -d -p 80:80 --network <n/w-name:expense> --name <container-name- frontend> frontend:v1
 ```
 
+3 types of networking in Docker networking
+
+1. host network - This is the network provided by ISP, in AWS its AWS ISP. In host network , containers do not get separate IPs for containers.
+   Container IP is also host IP. Containers are sharing host IP. Containers open host port. Eg: mqsql container opens 3306 host port, backend opens 8080 host port.
+
+   Below command displays host and bridge networks. We run a mysql container with host network and inspect mysql container. mysql container does not have IP
+```
+docker network ls
+docker run -d --name mysql --network host mysql:v1
+docker run -d --name backend --network host backend:v1
+docker run -d --name frontend --network host frontend:v1
+docker inspect mysql
+```
+      In host network if one container wants to connect to another eg: backend wants to connect to mqsql, we need to give DB_HOST as localhost. Similarly front to communicate with backedend, we give locahost in config file. 
+
+2. bridge network -  is default bridge network. Give ifconfig command to see it.
+      In Bridge network localhost will not work we have to give mysql / backend in config files to connect one container to another. In this default network, dns will not work.
+   In bridge network, new IPs are alloted to containers
+```
+docker network ls
+docker network create expense
+docker network ls   -> we can see expense network with bridge driver
+docker run -d --name mysql --network expense mysql:v1
+docker run -d --name backend --network expense backend:v1
+docker run -d -p 80:80 --name frontend --network expense frontend:v1
+```
+
+
+3. overlay network - To communicate between multiple docker hosts. To communicate from a container in one server to another container in another server
+      But its risky to communicate between multiple hosts containers. Hence we need some orchestration, will come in k8s.
+   
+
+
+DOCKER VOLUMES:
+
+Containers are ephemeral(temporary). They are temporary. Once we remove container, we loose data. Data is not persistent by default. Even if we delete container, data wont be lost if we use volumes.
+
+1. unnamed volumes
+
+We mount the data in local host to containers 
+
+-v host-path:container-path
+```
+docker run -d -v /home/ec2-user/nginx-date:/usr/share/nginx/html -p 80:80 nginx
+```
+whatever the data created in container path /usr/share/nginx/html will be stored to server path /home/ec2-user/nginx-date and vice-versa.
+
+All this mounted data stoes in /var/lib/docker directory in server
+
+2. named volumes
+   we can manage the named volumes with below docker command. But we can't manage unnamed volumes with docker commands
+
+   ```
+   docker volume ls
+   docker volume create <volume-name:nginx-html>
+   docker volume ls
+   docker inspect <voulme-name:nginx-html>
+   docker run -d -v <voulme-name:nginx-html>:/usr/share/nginx/html -p 80:80 nginx
+   ```
+All this mounted data stoes in /var/lib/docker directory in server
+
+
+DOCKER COMPOSE:
+
+When we have multiple commands in linux, we run those multiple commands by keeping them in a file and we run that file. i.e. shell script.
+
+Here in docker, when we have multiple docker commands to run sequentially like, (building mysql , backend, frontend images and running then with voulmes, networks etc) what we use is called docker compose.
+
+File name is docker-compose.yaml
+
+Docker compose is to up/down multiple serives at a time and we can give volumes, networks, dependencies in docker compose.
+
+command to run docker compose file is
+```
+docker compose up -d
+```
+It starts the docker services.
+
+TO stop the docker services and delete the containers
+```
+docker compose down
+```
+
+Usually the docker insatalled server is to build images. But its not scalable to run container in docker insatlled server. hence we have k8s
+
 
 
 
