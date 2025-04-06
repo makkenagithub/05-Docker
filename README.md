@@ -530,11 +530,87 @@ TO stop the docker services and delete the containers
 docker compose down
 ```
 
+When we give docker compose , it brings up the containers. If there is any change in docker image and then again if we give docker compose, it checks for changed images and runs them again.
+
+We do not need to remove the old one and run the new one. Docker does that automatically, when there is a change in docker image.
+
+Eg:
+```
+docker compose up -d
+docker build -t joindevops/backend:v1 .
+docker compose up -d
+```
+The above steps delete the old backend image and runs the backed with new image.
+
 Usually the docker insatalled server is to build images. But its not scalable to run container in docker insatlled server. hence we have k8s
 
 
 
 
+DOCKER BEST PRACTICES:
+
+Keep the docker image size small. At max 500MB. Alpine/Distroless image versions have less memory. 
+
+Commands are different for alpine linux OS. Ass user and add gorup commands might be different in alpine linux
+```
+docker exec it <container-id> sh    --> alpine
+docker exec it <container-id> bash    ---> almalinux
+```
+
+Layer Caching:
+
+The below command displays information about every command in docker file, when we  build the image. We need to set the env variable and then build the images
+```
+export DOCKER_BUILDKIT=0
+docker build -t joindevops/backend:v1
+```
+To unset the env variable
+```
+unset DOCKER_BUILDKIT
+```
+
+How docker file runs? :
+
+When we do docker build command, it runs first instruction and creates a container from it and runs 2nd instruction in it and creates 2nd image. 
+then it creates container from 2nd image and runs 3rd instruction and so on. We caan see this info after setting the layer env variable DOCKER_BUILDKIT=0
+
+So if we are running a container and made some cahnges in container. We can create  an image from running container with below command
+```
+docker commit container_id imagename
+```
+Layer Order: Order your Dockerfile instructions to maximize layer caching. Frequently changing commands should be at the end of the Dockerfile. So we can save build time and memory of layers
+Combine Commands: Combine commands where possible to reduce the number of layers, but balance it with readability.
+
+So docker images works based on layering. Every instruction in docker file create an intermediate conatiner and runs next instruction inside it and then saves container as the image layer.
+It goes on, at each step intermediate containers are removed and each layer is cached. When we push the image, it pushes the layers
+
+
+Multi Stage Builds:
+
+It looks like 2 docker files inside a docker file. Refer backend dockerfile for multisatge example.
+First file we use it for build and copy its output into 2nd file. It reduces the size of image. For java apps it saves upto 400MB.
+
+Docker ignore:
+
+We need to place .dockerignore file. Other wise all the files placed in the Dockerfile location are loaded by docker. Unnecessary files alose loaded by docker. hence it takes more time to build.
+
+.dockerignore File: Include a .dockerignore file to prevent unnecessary files and directories from being added to the build context, speeding up the build process and keeping the image clean.
+
+
+We restrict docker usage till image building only. Because docker is not good for scalability for big projects. We use k8s to run images are containers/pods.
+
+Docker architecture:
+
+Docker clinet is nothing but docker command line. 
+
+Docker host/daemon is docker service running
+
+when we give docker run command, docker daemon checks for the image exists locally (local repos) or not. If local image exists it runs it. 
+If not, then it pulls from docker hub/registry (remote repos), creates container , runs it, and passes output to clinet.
+
+![image](https://github.com/user-attachments/assets/52f169c4-6fa8-429a-b00d-82b937fc1fe7)
+
+![image](https://github.com/user-attachments/assets/b550a6d3-f66e-49e9-9830-74621f50882b)
 
 
 
